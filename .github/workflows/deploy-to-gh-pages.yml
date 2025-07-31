@@ -9,7 +9,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment:
-      name: gothub-pages
+      name: github-pages
       url: ${{steps.deployment.outputs.page_url}}
     permissions:
       contents: read
@@ -31,14 +31,9 @@ jobs:
       - name: Build the app
         run: npm run build
 
-      - name: setup pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload build artifacts
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist'
-
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
